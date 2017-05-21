@@ -1,0 +1,10 @@
+<html>
+   <head>
+      <title>Hellot</title>
+   </head>  
+   <body>
+      <div>        
+        <h2>${greeting}</h2>
+      </div>
+   </body>
+</html>
