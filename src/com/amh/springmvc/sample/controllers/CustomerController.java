@@ -23,7 +23,6 @@ private CustomerService customerService;
 	
 	@RequestMapping(value = "/customers", method = RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("customer", new Customer());
 		model.addAttribute("customers", this.customerService.getAll());
 		return "customerList";
 	}

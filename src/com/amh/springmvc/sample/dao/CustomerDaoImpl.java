@@ -5,10 +5,12 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.amh.springmvc.sample.models.Customer;
 
 @Repository
+@Transactional
 public class CustomerDaoImpl implements CustomerDao {
 	
 private SessionFactory sessionFactory;
