@@ -1,6 +1,5 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
@@ -24,48 +23,41 @@
 		<property name="prefix" value="" />
 		<property name="suffix" value=".ftl" />
 	</bean>
-	
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+
+	<bean id="customerDao" class="com.amh.springmvc.sample.dao.CustomerDaoImpl">
+	</bean>
+
+	<bean id="customerService" class="com.amh.springmvc.sample.services.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"></property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url"
-			value="jdbc:mysql://localhost:3306/customerdatabase" />
+		<property name="url" value="jdbc:mysql://localhost:3306/customerdatabase" />
 		<property name="username" value="root" />
 		<property name="password" value="root1" />
 	</bean>
 
-	<!-- Hibernate 5 SessionFactory Bean definition -->
-	<bean id="hibernate5AnnotatedSessionFactory"
-		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="annotatedClasses">
-			<list>
-				<value>com.amh.springmvc.sample.models.Customer</value>
-			</list>
-		</property>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect
-				</prop>
-				<prop key="hibernate.show_sql">true</prop>
-			</props>
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="packagesToScan" value="com.amh.springmvc.sample.models"></property>
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+			</bean>
 		</property>
 	</bean>
-	
-	<bean id="customerDao" class="com.amh.springmvc.sample.dao.CustomerDaoImpl">
-		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
+
+	<!-- Transactions -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-	
-	<bean id="customerService" class="com.amh.springmvc.sample.services.CustomerServiceImpl">
-		<property name="customerDao" ref="customerDao"></property>
-	</bean>
-	
-	
-	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-		<property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
-	</bean>
-	
-	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
 
 </beans>

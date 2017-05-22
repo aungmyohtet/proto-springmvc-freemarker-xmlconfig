@@ -24,6 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
+	@Transactional
 	public List<Customer> getAll() {
 		return this.customerDao.getAll();
 	}
@@ -41,6 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
+	@Transactional
 	public Customer findById(int id) {
 		return this.customerDao.findById(id);
 	}

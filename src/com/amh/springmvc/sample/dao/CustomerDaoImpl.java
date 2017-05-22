@@ -2,56 +2,47 @@ package com.amh.springmvc.sample.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.amh.springmvc.sample.models.Customer;
 
 @Repository
-@Transactional
 public class CustomerDaoImpl implements CustomerDao {
 	
-private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(SessionFactory sf){
-		this.sessionFactory = sf;
-	}
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Override
-	public void add(Customer customer) {
-		Session session = this.sessionFactory.getCurrentSession();
-		session.persist(customer);
+	public void add(Customer customer) {	
+		entityManager.persist(customer);
 	}
 
 	@Override
 	public List<Customer> getAll() {
-		Session session = this.sessionFactory.getCurrentSession();
-		List<Customer> customers = session.createQuery("from Customer").list();
-		return customers;
+		return entityManager.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
 	}
 
 	@Override
 	public void update(Customer customer) {
-		Session session = this.sessionFactory.getCurrentSession();
-		session.update(customer);
+		entityManager.merge(customer);
 	}
 
 	@Override
 	public void delete(int id) {
-		Session session = this.sessionFactory.getCurrentSession();
-		Customer customer = (Customer) session.load(Customer.class, new Integer(id));
+		Customer customer = entityManager.find(Customer.class, id);
 		if(customer != null){
-			session.delete(customer);
+			entityManager.remove(customer);
 		}
 	}
 
 	@Override
 	public Customer findById(int id) {
-		Session session = this.sessionFactory.getCurrentSession();		
-		Customer customer = (Customer) session.load(Customer.class, new Integer(id));
-		return customer;
+		return entityManager.find(Customer.class, id);
 	}
 
 }
