@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +28,17 @@ private CustomerService customerService;
 	public String list(Model model) {
 		model.addAttribute("customers", this.customerService.getAll());
 		return "customerList";
+	}
+	
+	@RequestMapping(value = "/customers/add", method = RequestMethod.GET)
+	public String showCustomerForm(Model model) {
+		return "addCustomer";
+	}
+	
+	@RequestMapping(value = "/customers", method = RequestMethod.POST)
+	public String addCustomer(@Validated @ModelAttribute("customerForm") Customer customer, BindingResult result, Model model) {
+		customerService.add(customer);
+		return "redirect:customers";
 	}
 
 }
