@@ -5,7 +5,7 @@
    </head>  
    <body>
       <div>          
-        	<form method="post" id="customerForm" name="customerForm"  action="">
+        	<form method="post" id="customerForm" name="customerForm"  action="./">
         	   Name:
         <@spring.bind "customerForm.name"/>
         <input type="text" name="${spring.status.expression}" />
