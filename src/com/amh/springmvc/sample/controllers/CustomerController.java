@@ -32,13 +32,14 @@ private CustomerService customerService;
 	
 	@RequestMapping(value = "/customers/add", method = RequestMethod.GET)
 	public String showCustomerForm(Model model) {
+		model.addAttribute("customerForm", new Customer());
 		return "addCustomer";
 	}
 	
-	@RequestMapping(value = "/customers", method = RequestMethod.POST)
+	@RequestMapping(value = "/customers/add", method = RequestMethod.POST)
 	public String addCustomer(@Validated @ModelAttribute("customerForm") Customer customer, BindingResult result, Model model) {
 		customerService.add(customer);
-		return "redirect:customers";
+		return "redirect:/customers";
 	}
 
 }

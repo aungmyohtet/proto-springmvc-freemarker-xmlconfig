@@ -4,11 +4,15 @@
    </head>  
    <body>
       <div>        
-        <ul>
-        <#list customers as customer>
-           <li>${customer.name}</li>
+         <table>
+           <#list customers as customer>
+           <tr>
+           <td>${customer.name!}</td>
+           <td>${customer.email!}</td>
+           <td>${customer.address!}</td>
+           </tr>
          </#list>
-         </ul>
+         </table>
       </div>
    </body>
 </html>

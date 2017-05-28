@@ -1,15 +1,23 @@
+<#import "/spring.ftl" as spring/>
 <html>
    <head>
       <title>Customers</title>
    </head>  
    <body>
-      <div>        
-        <form name="customerForm" action="/springmvc-prorotype-freemarker/customers" method="post">
-         <input type="text" name="name"/>
-         <input type="text" name="email"/>
-         <input type="text" name="address"/>
-         <input type="submit"/>
+      <div>          
+        	<form method="post" id="customerForm" name="customerForm"  action="">
+        	   Name:
+        <@spring.bind "customerForm.name"/>
+        <input type="text" name="${spring.status.expression}" />
+        
+        <@spring.bind "customerForm.email"/>
+        <input type="text" name="${spring.status.expression}" />
+        
+        <@spring.bind "customerForm.address"/>
+        <input type="text" name="${spring.status.expression}" />
+        <input type="submit" value="submit"/>
         </form>
+        
       </div>
    </body>
 </html>
